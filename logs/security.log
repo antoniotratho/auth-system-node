@@ -32,3 +32,4 @@
 {"level":"warn","message":{"action":"auth_middleware_invalid_token","error":"jwt malformed","ip":"::ffff:172.21.0.1"},"service":"auth-system","timestamp":"2026-05-25 20:23:04"}
 {"level":"warn","message":{"action":"auth_middleware_invalid_token","error":"jwt malformed","ip":"::ffff:172.21.0.1"},"service":"auth-system","timestamp":"2026-05-25 20:23:17"}
 {"level":"warn","message":{"action":"auth_middleware_invalid_token","error":"jwt malformed","ip":"::ffff:172.21.0.1"},"service":"auth-system","timestamp":"2026-05-25 20:24:32"}
+{"level":"warn","message":{"action":"auth_middleware_invalid_token","error":"jwt malformed","ip":"::ffff:172.21.0.1"},"service":"auth-system","timestamp":"2026-05-25 20:26:08"}
