@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const rateLimit = require('express-rate-limit');
 const AuthController = require('../controllers/AuthController');
+const TwoFactorController = require('../controllers/TwoFactorController');
+const PasswordResetController = require('../controllers/PasswordResetController');
 const authMiddleware = require('../../../shared/middlewares/authMiddleware');
 
 // ✅ Rate limit específico para login - MAIS RESTRITIVO
@@ -26,14 +28,39 @@ const registerLimiter = rateLimit({
   }
 });
 
-// Public routes
+// ✅ Rate limit para recuperação de senha
+// 3 tentativas por 15 minutos
+const passwordResetLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 3,
+  message: {
+    error: 'Muitas tentativas de recuperação. Tente novamente em 15 minutos.'
+  }
+});
+
+// ========== Authentication Routes ==========
 router.post('/register', registerLimiter, AuthController.register);
 router.post('/login', loginLimiter, AuthController.login);
-
-// Protected routes
 router.post('/logout', authMiddleware, AuthController.logout);
 
-// Health check
+// ========== 2FA Routes ==========
+router.post('/2fa/setup', authMiddleware, TwoFactorController.setupTwoFactor);
+router.post('/2fa/verify-setup', authMiddleware, TwoFactorController.verifyTwoFactorSetup);
+router.post('/login/2fa', authMiddleware, TwoFactorController.validateTwoFactor);
+router.post('/2fa/disable', authMiddleware, TwoFactorController.disableTwoFactor);
+
+// ========== Password Recovery Routes ==========
+router.post('/forgot-password', passwordResetLimiter, PasswordResetController.forgotPassword);
+router.post('/reset-password/:token', passwordResetLimiter, PasswordResetController.resetPassword);
+router.get('/reset-password/:token/validate', PasswordResetController.validateResetToken);
+
+// ========== LGPD Routes ==========
+router.get('/my-data', authMiddleware, require('../controllers/LGPDController').getMyData);
+router.post('/export-data', authMiddleware, require('../controllers/LGPDController').exportData);
+router.post('/delete-account', authMiddleware, require('../controllers/LGPDController').requestAccountDeletion);
+router.post('/consent', authMiddleware, require('../controllers/LGPDController').giveConsent);
+
+// ========== Health Check ==========
 router.get('/ping', (req, res) => {
   res.json({ message: 'Auth module funcionando 🚀' });
 });

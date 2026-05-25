@@ -1,0 +1,301 @@
+{
+  "info": {
+    "_postman_id": "auth-system-complete",
+    "name": "Auth System - Completo (Semanas 1-3)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "📌 SEMANA 1 - Autenticação Básica",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/auth/ping",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "auth", "ping"]
+            }
+          }
+        },
+        {
+          "name": "Registrar Usuário",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\":\"user1@example.com\",\"password\":\"SecurePass@123\"}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/auth/register",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\":\"user1@example.com\",\"password\":\"SecurePass@123\"}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/auth/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Content-Type", "value": "application/json"},
+              {"key": "Authorization", "value": "Bearer YOUR_TOKEN_HERE"}
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/auth/logout",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "auth", "logout"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🔐 SEMANA 2 - Autenticação de Dois Fatores (2FA)",
+      "item": [
+        {
+          "name": "2FA - Setup (Iniciar)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Content-Type", "value": "application/json"},
+              {"key": "Authorization", "value": "Bearer YOUR_TOKEN_HERE"}
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/auth/2fa/setup",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "auth", "2fa", "setup"]
+            }
+          }
+        },
+        {
+          "name": "2FA - Verify Setup (Ativar)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Content-Type", "value": "application/json"},
+              {"key": "Authorization", "value": "Bearer YOUR_TOKEN_HERE"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"secret\":\"SECRET_FROM_SETUP\",\"token\":\"123456\"}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/auth/2fa/verify-setup",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "auth", "2fa", "verify-setup"]
+            }
+          }
+        },
+        {
+          "name": "2FA - Login (Validar Token)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Content-Type", "value": "application/json"},
+              {"key": "Authorization", "value": "Bearer TEMP_TOKEN_FROM_LOGIN"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"token\":\"123456\"}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/auth/login/2fa",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "auth", "login", "2fa"]
+            }
+          }
+        },
+        {
+          "name": "2FA - Desativar",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Content-Type", "value": "application/json"},
+              {"key": "Authorization", "value": "Bearer YOUR_TOKEN_HERE"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"password\":\"SecurePass@123\"}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/auth/2fa/disable",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "auth", "2fa", "disable"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🔄 SEMANA 2 - Recuperação de Senha",
+      "item": [
+        {
+          "name": "Forgot Password (Solicitar Reset)",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\":\"user1@example.com\"}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/auth/forgot-password",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "auth", "forgot-password"]
+            }
+          }
+        },
+        {
+          "name": "Validate Reset Token",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/auth/reset-password/TOKEN_FROM_EMAIL/validate",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "auth", "reset-password", "TOKEN_FROM_EMAIL", "validate"]
+            }
+          }
+        },
+        {
+          "name": "Reset Password (Confirmar Nova Senha)",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"password\":\"NewSecurePass@456\",\"passwordConfirm\":\"NewSecurePass@456\"}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/auth/reset-password/TOKEN_FROM_EMAIL",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "auth", "reset-password", "TOKEN_FROM_EMAIL"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "📊 SEMANA 3 - LGPD (Dados Pessoais)",
+      "item": [
+        {
+          "name": "LGPD - Meus Dados",
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "Bearer YOUR_TOKEN_HERE"}
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/auth/my-data",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "auth", "my-data"]
+            }
+          }
+        },
+        {
+          "name": "LGPD - Exportar Dados",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Content-Type", "value": "application/json"},
+              {"key": "Authorization", "value": "Bearer YOUR_TOKEN_HERE"}
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/auth/export-data",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "auth", "export-data"]
+            }
+          }
+        },
+        {
+          "name": "LGPD - Consentimento",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Content-Type", "value": "application/json"},
+              {"key": "Authorization", "value": "Bearer YOUR_TOKEN_HERE"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"type\":\"authentication\",\"accepted\":true,\"version\":\"1.0\"}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/auth/consent",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "auth", "consent"]
+            }
+          }
+        },
+        {
+          "name": "LGPD - Solicitar Exclusão de Conta",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Content-Type", "value": "application/json"},
+              {"key": "Authorization", "value": "Bearer YOUR_TOKEN_HERE"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"password\":\"SecurePass@123\"}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/auth/delete-account",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "auth", "delete-account"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

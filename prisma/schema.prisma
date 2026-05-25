@@ -14,11 +14,57 @@ datasource db {
 }
 
 model User{
-  id              Int     @id @default(autoincrement())
-  email           String  @unique
-  password        String
-  failedAttempts  Int      @default(0)
-  lockUntil       DateTime?
-  twoFactorSecret String?
-  createdAt       DateTime @default(now())
+  id                  Int     @id @default(autoincrement())
+  email               String  @unique
+  password            String
+  failedAttempts      Int      @default(0)
+  lockUntil           DateTime?
+  twoFactorEnabled    Boolean  @default(false)
+  twoFactorSecret     String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @default(now()) @updatedAt
+  
+  // Relacionamentos
+  passwordResets      PasswordReset[]
+  dataExports         DataExport[]
+  consents            Consent[]
+}
+
+model PasswordReset {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  token     String   @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Consent {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  version     String   // ex: "1.0"
+  type        String   // "authentication", "newsletter", etc
+  accepted    Boolean
+  acceptedAt  DateTime
+  revokedAt   DateTime?
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime @default(now())
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, type, version])
+}
+
+model DataExport {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  token       String   @unique
+  expiresAt   DateTime
+  downloadedAt DateTime?
+  createdAt   DateTime @default(now())
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
