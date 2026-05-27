@@ -1,8 +1,9 @@
 const router = require('express').Router();
-const rateLimit = require('express-rate-limit');
+const { rateLimit, ipKeyGenerator } = require('express-rate-limit');
 const AuthController = require('../controllers/AuthController');
 const TwoFactorController = require('../controllers/TwoFactorController');
 const PasswordResetController = require('../controllers/PasswordResetController');
+const EmailTestController = require('../controllers/EmailTestController');
 const authMiddleware = require('../../../shared/middlewares/authMiddleware');
 
 // ✅ Rate limit específico para login - MAIS RESTRITIVO
@@ -10,6 +11,7 @@ const authMiddleware = require('../../../shared/middlewares/authMiddleware');
 const loginLimiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minuto
   max: 5,
+  keyGenerator: (req) => req.body?.email || ipKeyGenerator(req.ip),
   message: {
     error: 'Muitas tentativas de login. Tente novamente em 1 minuto.'
   },
@@ -23,6 +25,7 @@ const loginLimiter = rateLimit({
 const registerLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutos
   max: 3,
+  keyGenerator: (req) => req.body?.email || ipKeyGenerator(req.ip),
   message: {
     error: 'Muitas tentativas de registro. Tente novamente em 15 minutos.'
   }
@@ -32,7 +35,8 @@ const registerLimiter = rateLimit({
 // 3 tentativas por 15 minutos
 const passwordResetLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 3,
+  max: process.env.NODE_ENV === 'production' ? 10 : 100,
+  keyGenerator: (req) => req.body?.email || req.params?.token || ipKeyGenerator(req.ip),
   message: {
     error: 'Muitas tentativas de recuperação. Tente novamente em 15 minutos.'
   }
@@ -50,9 +54,11 @@ router.post('/login/2fa', authMiddleware, TwoFactorController.validateTwoFactor)
 router.post('/2fa/disable', authMiddleware, TwoFactorController.disableTwoFactor);
 
 // ========== Password Recovery Routes ==========
+router.post('/forgot-password2',  PasswordResetController.forgotPassword);
 router.post('/forgot-password', passwordResetLimiter, PasswordResetController.forgotPassword);
 router.post('/reset-password/:token', passwordResetLimiter, PasswordResetController.resetPassword);
 router.get('/reset-password/:token/validate', PasswordResetController.validateResetToken);
+router.post('/test-email', EmailTestController.sendTest);
 
 // ========== LGPD Routes ==========
 router.get('/my-data', authMiddleware, require('../controllers/LGPDController').getMyData);

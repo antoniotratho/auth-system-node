@@ -1,4 +1,4 @@
-const { v4: uuidv4 } = require('uuid');
+const { randomUUID } = require('crypto');
 const logger = require('../../../shared/logger');
 const UserRepository = require('../repositories/UserRepository');
 const DataExportRepository = require('../repositories/DataExportRepository');
@@ -78,7 +78,7 @@ class LGPDController {
       const { userId } = req.user;
 
       // Gerar token e link de export
-      const exportToken = uuidv4();
+      const exportToken = randomUUID();
       const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 horas
 
       await DataExportRepository.create({
@@ -138,7 +138,7 @@ class LGPDController {
       }
 
       // Gerar token de confirmação
-      const deleteToken = uuidv4();
+      const deleteToken = randomUUID();
       const confirmUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/confirm-delete-account`;
 
       // TODO: Salvar token em cache/DB com expiração 15 minutos

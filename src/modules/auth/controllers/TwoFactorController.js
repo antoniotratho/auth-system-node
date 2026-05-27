@@ -24,10 +24,18 @@ class TwoFactorController {
 
       return res.status(200).json({
         message: '2FA setup iniciado',
-        secret: secret.base32,
+        secret: secret.secret,
+        otpauthUrl: secret.otpauth_url,
         qrCode: qrCode,
-        backupCodes: twoFactorService.generateBackupCodes(),
-        instruction: 'Escaneie o QR code com seu app authenticator (Google Authenticator, Authy, etc)'
+        backupCodes: secret.backup_codes,
+        totp: {
+          issuer: 'AuthSystem',
+          algorithm: 'SHA1',
+          digits: 6,
+          period: 30,
+          serverTime: new Date().toISOString()
+        },
+        instruction: 'Escaneie o QR code e informe o codigo atual de 6 digitos do app authenticator'
       });
     } catch (error) {
       logger.error({

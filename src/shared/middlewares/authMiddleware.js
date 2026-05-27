@@ -37,7 +37,7 @@ const authMiddleware = (req, res, next) => {
     const decoded = jwt.verify(token, jwtSecret);
 
     // Verificar se é token temporário (após autenticação primária, aguardando 2FA)
-    if (decoded.temporary) {
+    if (decoded.temporary && req.path !== '/login/2fa') {
       logger.warn({
         action: 'auth_middleware_temporary_token',
         userId: decoded.userId,

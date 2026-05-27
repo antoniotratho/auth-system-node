@@ -14,12 +14,12 @@ class TwoFactorService {
    */
   generateSecret(email) {
     try {
+      const issuer = 'AuthSystem';
+      const label = `${issuer}:${email}`;
       const secret = speakeasy.generateSecret({
-        name: `AuthSystem (${email})`,
-        issuer: 'AuthSystem',
-        length: 32,
-        symbols: true
+        length: 20
       });
+      const otpauthUrl = `otpauth://totp/${encodeURIComponent(label)}?secret=${secret.base32}&issuer=${encodeURIComponent(issuer)}&algorithm=SHA1&digits=6&period=30`;
 
       logger.info({
         action: 'twofa_secret_generated',
@@ -29,7 +29,7 @@ class TwoFactorService {
 
       return {
         secret: secret.base32,
-        otpauth_url: secret.otpauth_url,
+        otpauth_url: otpauthUrl,
         backup_codes: this.generateBackupCodes()
       };
     } catch (error) {
@@ -93,7 +93,7 @@ class TwoFactorService {
    */
   verifyToken(secret, token) {
     try {
-      if (!token || !/^\d{6}$/.test(token)) {
+      if (!token) {
         logger.warn({
           action: 'twofa_verify_failed',
           reason: 'invalid_token_format'
@@ -101,21 +101,35 @@ class TwoFactorService {
         return false;
       }
 
-      const isValid = speakeasy.totp.verify({
+      const normalizedToken = token.toString().replace(/\D/g, '');
+      if (!/^\d{6}$/.test(normalizedToken)) {
+        logger.warn({
+          action: 'twofa_verify_failed',
+          reason: 'invalid_token_format'
+        });
+        return false;
+      }
+
+      const defaultWindow = process.env.NODE_ENV === 'production' ? 2 : 15;
+      const window = Number(process.env.TWO_FACTOR_WINDOW || defaultWindow);
+      const delta = speakeasy.totp.verifyDelta({
         secret: secret,
         encoding: 'base32',
-        token: token,
-        window: 2 // Permite 2 janelas de tempo (60 segundos + 30s antes/depois)
+        token: normalizedToken,
+        window
       });
+      const isValid = delta !== undefined;
 
       if (isValid) {
         logger.info({
-          action: 'twofa_verified'
+          action: 'twofa_verified',
+          delta: delta.delta
         });
       } else {
         logger.warn({
           action: 'twofa_verify_failed',
-          reason: 'invalid_token'
+          reason: 'invalid_token',
+          window
         });
       }
 

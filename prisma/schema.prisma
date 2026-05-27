@@ -19,6 +19,7 @@ model User{
   password            String
   failedAttempts      Int      @default(0)
   lockUntil           DateTime?
+  lastFailedLoginAt   DateTime?
   twoFactorEnabled    Boolean  @default(false)
   twoFactorSecret     String?
   createdAt           DateTime @default(now())
