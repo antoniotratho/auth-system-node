@@ -37,7 +37,7 @@ class PasswordResetController {
         expiresAt
       });
 
-      const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/reset-password`;
+      const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:8081'}/reset-password`;
 
       let emailSent = false;
       try {

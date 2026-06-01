@@ -204,3 +204,6 @@
 {"level":"warn","message":{"action":"login_failed_invalid_password","email":"antonioivo.3@gmail.com","failedAttempts":1,"ip":"::ffff:172.18.0.1"},"service":"auth-system","timestamp":"2026-05-27 00:30:21"}
 {"level":"error","message":{"action":"login_error","email":"antonioivo.3@gmail.com","error":"Credenciais inválidas","ip":"::ffff:172.18.0.1"},"service":"auth-system","timestamp":"2026-05-27 00:30:21"}
 {"level":"warn","message":{"action":"login_controller_error","error":"Credenciais inválidas","ip":"::ffff:172.18.0.1"},"service":"auth-system","timestamp":"2026-05-27 00:30:21"}
+{"level":"warn","message":{"action":"login_failed_invalid_password","email":"antonioivo.3@gmail.com","failedAttempts":1,"ip":"::ffff:172.19.0.4"},"service":"auth-system","timestamp":"2026-06-01 00:56:11"}
+{"level":"error","message":{"action":"login_error","email":"antonioivo.3@gmail.com","error":"Credenciais inválidas","ip":"::ffff:172.19.0.4"},"service":"auth-system","timestamp":"2026-06-01 00:56:11"}
+{"level":"warn","message":{"action":"login_controller_error","error":"Credenciais inválidas","ip":"::ffff:172.19.0.4"},"service":"auth-system","timestamp":"2026-06-01 00:56:11"}

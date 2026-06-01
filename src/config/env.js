@@ -4,7 +4,7 @@ module.exports = {
   port: process.env.PORT || 3000,
   nodeEnv: process.env.NODE_ENV || 'development',
   jwtSecret: process.env.JWT_SECRET || 'your-secret-key-here-change-in-production',
-  allowedOrigins: (process.env.ALLOWED_ORIGINS || 'http://localhost:3000').split(','),
+  allowedOrigins: (process.env.ALLOWED_ORIGINS || 'http://localhost:3000,http://localhost:8080,http://localhost:8081').split(','),
   databaseUrl: process.env.DATABASE_URL,
   smtpHost: process.env.SMTP_HOST,
   smtpPort: process.env.SMTP_PORT,
