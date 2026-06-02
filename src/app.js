@@ -1,11 +1,13 @@
 const express = require('express');
 const cors = require('cors');
-require('./config/env');
+const env = require('./config/env');
 
 const app = express();
+app.set('trust proxy', 1);
 
 const loggerMiddleware = require('./shared/middlewares/loggerMiddleware');
 const authRoutes = require('./modules/auth/routes/auth.routes');
+const auditRoutes = require('./modules/audit/routes/auditRoutes');
 const errorMiddleware = require('./shared/middlewares/errorMiddleware');
 const rateLimitMiddleware = require('./shared/middlewares/rateLimitMiddleware');
 const logger = require('./shared/logger');
@@ -34,16 +36,17 @@ app.use((req, res, next) => {
 });
 
 // ✅ CORS restritivo
-const allowedOrigins = (process.env.ALLOWED_ORIGINS || 'http://localhost:3000').split(',');
+const allowedOrigins = env.allowedOrigins.map((origin) => origin.trim());
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin.trim())) {
+    const normalizedOrigin = origin?.trim();
+
+    if (!normalizedOrigin || allowedOrigins.includes(normalizedOrigin)) {
       callback(null, true);
     } else {
       logger.warn({
         action: 'cors_blocked',
-        origin: origin,
-        ip: req ? req.ip : 'unknown'
+        origin: normalizedOrigin
       });
       callback(new Error('Not allowed by CORS'));
     }
@@ -59,6 +62,7 @@ app.use(rateLimitMiddleware);
 app.use(loggerMiddleware);
 
 app.use('/api/auth', authRoutes);
+app.use('/api/audit', auditRoutes);
 
 app.use(errorMiddleware);
 

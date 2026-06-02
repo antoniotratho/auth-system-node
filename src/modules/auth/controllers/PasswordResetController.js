@@ -135,6 +135,17 @@ class PasswordResetController {
 
       await PasswordResetRepository.markAsUsed(resetRequest.id);
 
+      const user = await UserRepository.findById(resetRequest.userId);
+      if (user?.email) {
+        emailService.sendPasswordChangedEmail(user.email).catch((emailError) => {
+          logger.warn({
+            action: 'password_changed_email_async_failed',
+            userId: resetRequest.userId,
+            error: emailError.message
+          });
+        });
+      }
+
       logger.info({
         action: 'password_reset_success',
         userId: resetRequest.userId

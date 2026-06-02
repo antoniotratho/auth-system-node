@@ -9,6 +9,40 @@ class ConsentRepository {
   }
 
   /**
+   * Criar ou atualizar consentimento para uma finalidade e versão
+   */
+  async upsertByUserTypeVersion(userId, type, version, data) {
+    return prisma.consent.upsert({
+      where: {
+        userId_type_version: {
+          userId,
+          type,
+          version
+        }
+      },
+      update: data,
+      create: {
+        userId,
+        type,
+        version,
+        ...data
+      }
+    });
+  }
+
+  /**
+   * Buscar consentimento do usuário por id
+   */
+  async findByIdForUser(id, userId) {
+    return prisma.consent.findFirst({
+      where: {
+        id,
+        userId
+      }
+    });
+  }
+
+  /**
    * Buscar consentimento específico
    */
   async findByUserIdAndType(userId, type) {
@@ -39,7 +73,10 @@ class ConsentRepository {
   async revoke(id) {
     return prisma.consent.update({
       where: { id },
-      data: { revokedAt: new Date() }
+      data: {
+        accepted: false,
+        revokedAt: new Date()
+      }
     });
   }
 

@@ -1,0 +1,24 @@
+{
+  "version": "1.0",
+  "createdAt": "2026-06-01T23:12:53.299Z",
+  "logs": {
+    "error.log": {
+      "hash": "daa52afd7be131b3601d58594254b06da87c31e2fc7dd5c864b8ac3ff3feb87e",
+      "lineCount": 66,
+      "timestamp": "2026-06-02T00:15:56.158Z",
+      "verify": true
+    },
+    "security.log": {
+      "hash": "823b1b9368473bee7cf1572ffa2638ba6ba1a64e84e519728050eea65153e483",
+      "lineCount": 231,
+      "timestamp": "2026-06-02T00:15:56.168Z",
+      "verify": true
+    },
+    "app.log": {
+      "hash": "41d4d59d1742a3c91d6cf5ce6f41619091eee64544c861f963373bd5a872a3e5",
+      "lineCount": 782,
+      "timestamp": "2026-06-02T00:15:56.184Z",
+      "verify": true
+    }
+  }
+}

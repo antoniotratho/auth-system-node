@@ -1,5 +1,6 @@
 const { createLogger, format, transports } = require('winston');
 const path = require('path');
+const LogSecurityManager = require('./utils/logSecurityManager');
 
 // ✅ Criar diretório de logs se não existir
 const fs = require('fs');
@@ -7,6 +8,9 @@ const logsDir = path.join(__dirname, '../../logs');
 if (!fs.existsSync(logsDir)) {
   fs.mkdirSync(logsDir, { recursive: true });
 }
+
+// ✅ Inicializar gerenciador de segurança de logs
+const logSecurityManager = new LogSecurityManager(logsDir);
 
 const logger = createLogger({
   level: process.env.LOG_LEVEL || 'info',
@@ -56,4 +60,24 @@ if (process.env.NODE_ENV !== 'production') {
   );
 }
 
+// ✅ Após cada escrita de log, atualizar hash de integridade
+const originalEmit = logger.emit;
+logger.emit = function(...args) {
+  originalEmit.apply(this, args);
+  
+  // Atualizar hashes dos arquivos de log periodicamente
+  setImmediate(() => {
+    ['error.log', 'security.log', 'app.log'].forEach(logFile => {
+      const filePath = path.join(logsDir, logFile);
+      if (fs.existsSync(filePath)) {
+        const hash = logSecurityManager.calculateFileHash(filePath);
+        const lineCount = fs.readFileSync(filePath, 'utf-8').split('\n').length;
+        logSecurityManager.recordLogHash(logFile, hash, lineCount);
+        logSecurityManager.setAppendOnlyPermissions(filePath);
+      }
+    });
+  });
+};
+
 module.exports = logger;
+module.exports.logSecurityManager = logSecurityManager;

@@ -63,8 +63,11 @@ router.post('/test-email', EmailTestController.sendTest);
 // ========== LGPD Routes ==========
 router.get('/my-data', authMiddleware, require('../controllers/LGPDController').getMyData);
 router.post('/export-data', authMiddleware, require('../controllers/LGPDController').exportData);
+router.get('/download-data/:token', require('../controllers/LGPDController').downloadData);
 router.post('/delete-account', authMiddleware, require('../controllers/LGPDController').requestAccountDeletion);
+router.get('/consents', authMiddleware, require('../controllers/LGPDController').listConsents);
 router.post('/consent', authMiddleware, require('../controllers/LGPDController').giveConsent);
+router.post('/consent/:id/revoke', authMiddleware, require('../controllers/LGPDController').revokeConsent);
 
 // ========== Health Check ==========
 router.get('/ping', (req, res) => {

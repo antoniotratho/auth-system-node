@@ -136,7 +136,7 @@ class TwoFactorController {
 
       // Gerar JWT final (sem temporary flag)
       const jwt = require('../../../shared/utils/jwt');
-      const finalToken = jwt.generateJWT({ userId: user.id });
+      const finalToken = jwt.generateJWT({ userId: user.id, role: user.role });
 
       logger.info({
         action: '2fa_validation_success',
@@ -147,7 +147,8 @@ class TwoFactorController {
       return res.status(200).json({
         message: 'Autenticação de dois fatores validada',
         token: finalToken,
-        expiresIn: 3600
+        expiresIn: 3600,
+        role: user.role
       });
     } catch (error) {
       logger.error({

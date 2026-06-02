@@ -2,6 +2,7 @@ const hash = require('../../../shared/utils/hash');
 const logger = require("../../../shared/logger");
 const UserRepository = require("../repositories/UserRepository");
 const jwt = require("../../../shared/utils/jwt");
+const emailService = require("../../../shared/services/EmailService");
 
 class AuthService {
 
@@ -11,8 +12,13 @@ class AuthService {
    * @param {string} password - Senha em texto plano
    * @returns {Promise} Dados do usuário criado
    */
-  async register(email, password) {
+  async register(email, password, role = 'morador') {
     try {
+      const allowedRoles = ['sindico', 'morador'];
+      if (!allowedRoles.includes(role)) {
+        throw new Error('Role inválida. Deve ser "sindico" ou "morador"');
+      }
+
       // Validar email único
       const userExists = await UserRepository.findByEmail(email);
       if (userExists) {
@@ -35,6 +41,7 @@ class AuthService {
       const user = await UserRepository.create({
         email,
         password: hashedPassword,
+        role,
         failedAttempts: 0,
         twoFactorEnabled: false
       });
@@ -43,6 +50,14 @@ class AuthService {
         action: 'user_registered',
         email: email,
         userId: user.id
+      });
+
+      emailService.sendWelcomeEmail(user.email, user.role).catch((emailError) => {
+        logger.warn({
+          action: 'welcome_email_async_failed',
+          email: user.email,
+          error: emailError.message
+        });
       });
 
       return {
@@ -125,24 +140,26 @@ class AuthService {
       // Se 2FA está ativado, retornar token temporário
       if (user.twoFactorEnabled) {
         const tempToken = jwt.generateJWT(
-          { userId: user.id, temporary: true },
+          { userId: user.id, temporary: true, role: user.role },
           '5m'
         );
 
         return {
           requiresTwoFactor: true,
           tempToken: tempToken,
+          role: user.role,
           message: 'Complete a autenticação de dois fatores'
         };
       }
 
       // Sem 2FA - retornar JWT permanente
-      const token = jwt.generateJWT({ userId: user.id }, '1h');
+      const token = jwt.generateJWT({ userId: user.id, role: user.role }, '1h');
 
       return {
         message: 'Login realizado com sucesso',
         token: token,
-        expiresIn: 3600
+        expiresIn: 3600,
+        role: user.role
       };
     } catch (error) {
       logger.error({

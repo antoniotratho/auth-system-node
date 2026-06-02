@@ -7,7 +7,7 @@ class AuthController {
    */
   async register(req, res) {
     try {
-      const { email, password } = req.body;
+      const { email, password, role } = req.body;
 
       // Validar entrada
       if (!email || !password) {
@@ -16,7 +16,7 @@ class AuthController {
         });
       }
 
-      const user = await AuthService.register(email, password);
+      const user = await AuthService.register(email, password, role);
       res.status(201).json(user);
     } catch (error) {
       logger.warn({
