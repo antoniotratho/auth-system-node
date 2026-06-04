@@ -63,3 +63,5 @@
 {"level":"error","message":{"action":"download_data_error","error":"Cannot read properties of undefined (reading 'buildUserExport')","token":"18f7edec-8cfb-49a7-9053-1e61b8b20bde"},"service":"auth-system","timestamp":"2026-06-01 23:25:14"}
 {"level":"error","message":{"action":"login_error","email":"antonioivo.3@gmail.com","error":"Credenciais inválidas","ip":"172.19.0.1"},"service":"auth-system","timestamp":"2026-06-01 23:53:52"}
 {"level":"error","message":{"action":"register_error","error":"Email já registrado"},"service":"auth-system","timestamp":"2026-06-01 23:56:01"}
+{"level":"error","message":{"action":"login_error","email":"antonioivo.3@gmail.com","error":"Credenciais inválidas","ip":"172.19.0.1"},"service":"auth-system","timestamp":"2026-06-02 01:04:06"}
+{"level":"error","message":{"action":"login_error","email":"antonioivo.3@gmail.com","error":"Credenciais inválidas","ip":"172.19.0.1"},"service":"auth-system","timestamp":"2026-06-02 01:05:53"}

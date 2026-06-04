@@ -228,3 +228,11 @@
 {"level":"warn","message":{"action":"auth_middleware_no_token","ip":"172.19.0.1","method":"GET","url":"/consents"},"service":"auth-system","timestamp":"2026-06-01 23:58:58"}
 {"level":"warn","message":{"action":"auth_middleware_temporary_token","ip":"172.19.0.1","userId":1},"service":"auth-system","timestamp":"2026-06-02 00:04:40"}
 {"level":"warn","message":{"action":"auth_middleware_no_token","ip":"172.19.0.1","method":"GET","url":"/consents"},"service":"auth-system","timestamp":"2026-06-02 00:05:35"}
+{"level":"warn","message":{"action":"login_failed_user_not_found","email":"antonioivo.3@gmail.com","ip":"172.19.0.1"},"service":"auth-system","timestamp":"2026-06-02 01:04:06"}
+{"level":"error","message":{"action":"login_error","email":"antonioivo.3@gmail.com","error":"Credenciais inválidas","ip":"172.19.0.1"},"service":"auth-system","timestamp":"2026-06-02 01:04:06"}
+{"level":"warn","message":{"action":"login_controller_error","error":"Credenciais inválidas","ip":"172.19.0.1"},"service":"auth-system","timestamp":"2026-06-02 01:04:06"}
+{"level":"warn","message":{"action":"login_failed_user_not_found","email":"antonioivo.3@gmail.com","ip":"172.19.0.1"},"service":"auth-system","timestamp":"2026-06-02 01:05:53"}
+{"level":"error","message":{"action":"login_error","email":"antonioivo.3@gmail.com","error":"Credenciais inválidas","ip":"172.19.0.1"},"service":"auth-system","timestamp":"2026-06-02 01:05:53"}
+{"level":"warn","message":{"action":"login_controller_error","error":"Credenciais inválidas","ip":"172.19.0.1"},"service":"auth-system","timestamp":"2026-06-02 01:05:53"}
+{"level":"warn","message":{"action":"auth_middleware_no_token","ip":"172.19.0.1","method":"GET","url":"/consents"},"service":"auth-system","timestamp":"2026-06-02 01:06:24"}
+{"level":"warn","message":{"action":"twofa_verify_failed","reason":"invalid_token_format"},"service":"auth-system","timestamp":"2026-06-02 01:07:51"}

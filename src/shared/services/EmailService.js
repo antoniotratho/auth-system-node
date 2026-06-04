@@ -5,7 +5,7 @@ class EmailService {
   constructor() {
     this.transporter = null;
     this.brand = {
-      name: 'Condo Transparente',
+      name: 'Clique Sindico',
       primary: '#ff7059',
       primaryDark: '#e84f38',
       background: '#fffaf5',
@@ -188,8 +188,8 @@ class EmailService {
       const dashboardPath = role === 'sindico' ? '/sindico' : '/morador';
       const dashboardUrl = `${frontendUrl}${dashboardPath}`;
       const html = this.buildEmail({
-        preheader: 'Sua conta no Condo Transparente foi criada com sucesso.',
-        title: 'Bem-vindo ao Condo Transparente',
+        preheader: 'Sua conta no Clique Sindico foi criada com sucesso.',
+        title: 'Bem-vindo ao Clique Sindico',
         intro: 'Sua conta foi criada com sucesso. Agora você pode acessar o portal, revisar seus dados, configurar segurança e acompanhar as informações do condomínio.',
         children: this.buildInfoList([
           { label: 'Perfil', value: role === 'sindico' ? 'Síndico' : 'Morador' },
@@ -201,9 +201,9 @@ class EmailService {
 
       return await this.sendBrandedEmail({
         to: email,
-        subject: 'Bem-vindo ao Condo Transparente',
+        subject: 'Bem-vindo ao Clique Sindico',
         html,
-        text: `Bem-vindo ao Condo Transparente. Acesse: ${dashboardUrl}`,
+        text: `Bem-vindo ao Clique Sindico. Acesse: ${dashboardUrl}`,
         logAction: 'welcome_email'
       });
     } catch (error) {
@@ -229,7 +229,7 @@ class EmailService {
 
       return await this.sendBrandedEmail({
         to: email,
-        subject: 'Redefinição de senha - Condo Transparente',
+        subject: 'Redefinição de senha - Clique Sindico',
         html,
         text: `Redefina sua senha pelo link: ${resetLink}. O link expira em 15 minutos.`,
         logAction: 'password_reset_email'
@@ -257,7 +257,7 @@ class EmailService {
 
       return await this.sendBrandedEmail({
         to: email,
-        subject: 'Senha atualizada - Condo Transparente',
+        subject: 'Senha atualizada - Clique Sindico',
         html,
         text: `Sua senha foi atualizada. Acesse: ${loginUrl}`,
         logAction: 'password_changed_email'
@@ -291,9 +291,9 @@ class EmailService {
     const info = await transporter.sendMail({
       from: this.getFromAddress(),
       to: email,
-      subject: 'Teste SMTP - Condo Transparente',
+      subject: 'Teste SMTP - Clique Sindico',
       html,
-      text: 'Teste SMTP do Condo Transparente.'
+      text: 'Teste SMTP do Clique Sindico.'
     });
 
     return {
@@ -324,9 +324,9 @@ class EmailService {
 
       return await this.sendBrandedEmail({
         to: email,
-        subject: 'Ative o 2FA - Condo Transparente',
+        subject: 'Ative o 2FA - Clique Sindico',
         html,
-        text: 'Finalize a configuração de autenticação em dois fatores no Condo Transparente.',
+        text: 'Finalize a configuração de autenticação em dois fatores no Clique Sindico.',
         logAction: '2fa_setup_email'
       });
     } catch (error) {
@@ -353,7 +353,7 @@ class EmailService {
 
       return await this.sendBrandedEmail({
         to: email,
-        subject: 'Confirmação de exclusão de conta - Condo Transparente',
+        subject: 'Confirmação de exclusão de conta - Clique Sindico',
         html,
         text: `Confirme a exclusão da conta pelo link: ${deleteLink}`,
         logAction: 'account_delete_email'
